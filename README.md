@@ -1,7 +1,7 @@
 Watch for [Main Repository](https://github.com/aronei44/docker-laravel-nextjs-mysql)
 
-# docker-laravel-nextjs-mysql
-Create services Laravel, NextJs and Mysql with Docker Compose
+# Cetan App
+Cetan app is an aplication for realtime chatting
 
 # Requirement
 
@@ -11,8 +11,8 @@ Create services Laravel, NextJs and Mysql with Docker Compose
 # Installation
 
 ```
-git clone https://github.com/aronei44/docker-laravel-nextjs-mysql.git your-project-name
-cd your-project-name
+git clone https://github.com/candradimuka-community/cetan.git
+cd cetan
 cp .env.sample .env
 docker-compose up --build -d
 ```
@@ -43,6 +43,7 @@ docker container exec php php artisan route:list
 
 - For backend, use port 8000 or you just need open 127.0.0.1:8000 or http://localhost:8000
 
+- For documentaion,  open 127.0.0.1:8000/api/documentation or http://localhost:8000/api/documentation
 
 
 # Contributing
