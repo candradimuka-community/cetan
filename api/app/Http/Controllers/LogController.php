@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\SendCodeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class LogController extends Controller
 {
@@ -20,17 +22,17 @@ class LogController extends Controller
                     'email'=>$request->email,
                     'code'=>random_int(100000, 999999)
                 ]);
+                Mail::to($user->email)->send(new SendCodeMail($user->email, $user->code));
                 return response()->json([
                     'status'=>'created',
-                    'data'=>$user
                 ],201);
             }
             if($user->email_verified_at == null){
                 $user->code = random_int(100000,999999);
                 $user->save();
+                Mail::to($user->email)->send(new SendCodeMail($user->email, $user->code));
                 return response()->json([
                     'status'=>'created',
-                    'data'=>$user
                 ],201);
             }
             return response()->json([
@@ -39,7 +41,8 @@ class LogController extends Controller
             ],200);
         } catch (\Throwable $th) {
             return response()->json([
-                'status'=>'Internal Server Error'
+                'status'=>'Internal Server Error',
+                'error'=>$th
             ],500);
         }
     }
