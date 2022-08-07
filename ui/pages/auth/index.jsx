@@ -17,10 +17,12 @@ const Index = () => {
     const [watch, setWatch] = useState('0:0')
     const [cbPassword, setCbPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [pw, setPw] = useState(true)
     const resendCode = async ({
             forgetPassword=false
         }) => {
         setLoading(true)
+        setPw(forgetPassword)
         const { status, data } = await Api({
             path: "code/"+form.email,
             method: "POST",
@@ -31,6 +33,9 @@ const Index = () => {
         if (status === 200){
             setTime(new Date(data.resend_time))
             setDiffTime(Math.floor((new Date(data.resend_time) - new Date())/1000))
+            if(forgetPassword === true){
+                setStep(2)
+            }
             setLoading(false)
         } else {
             console.log(data.status)
@@ -70,7 +75,7 @@ const Index = () => {
             }
         } else if (step === 3){
             const {status, data} = await Api({
-                path: "set-password",
+                path: pw === true ? "reset-password/"+form.email : "set-password",
                 method: "POST",
                 data: form
             })
@@ -188,7 +193,7 @@ const Index = () => {
                         {(step === 3 || step === 4 ) && (
                             <span>
                                 <input type="checkbox" className="ml-5" onClick={()=>setCbPassword(!cbPassword)} value={cbPassword} checked={cbPassword} id="cbPassword"/>
-                                <span className="ml-2 text-slate-600 text-sm" onClick={()=>setCbPassword(!cbPassword)}>Lihat Password</span>
+                                <span className="ml-2 text-slate-600 text-sm" onClick={()=>setCbPassword(!cbPassword)}>See Password</span>
                             </span>
                         )}
                         {step === 2 && (
@@ -198,6 +203,11 @@ const Index = () => {
                         )}
                         <button disabled={step === 1 && !validateEmail(form.email) || step === 2 && form.code < 100000 || step === 2 && form.code > 999999 || step === 3 && form.password !== form.rePassword || step === 3 && form.password.length < 8 || loading || step === 4 && form.password.length < 8} className="py-2 px-5  rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 block ml-auto" onClick={send}>{loading ? 'Loading...':'Send'}</button>
                     </div>
+                    {step === 4 && (
+                        <span className="text-xs ml-5">
+                            Forgot Password ? <button className="text-white bg-blue-500 px-2 p-1 rounded-full hover:cursor-pointer hover:bg-blue-600" onClick={()=>resendCode({forgetPassword:true})} disabled={loading}>Reset Password</button>
+                        </span>
+                    )}
                 </div>
             </div>  
         </div>
