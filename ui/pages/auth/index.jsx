@@ -12,8 +12,28 @@ const Index = () => {
         password:'',
         rePassword:''
     })
+    const [time, setTime] = useState(new Date())
+    const [diffTime, setDiffTime] = useState(0)
+    const [watch, setWatch] = useState('0:0')
     const [cbPassword, setCbPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const resendCode = async ({
+            forgetPassword=false
+        }) => {
+        const { status, data } = await Api({
+            path: "code/"+form.email,
+            method: "POST",
+            data: {
+                forgetPassword
+            }
+        })
+        if (status === 200){
+            setTime(new Date(data.resend_time))
+            setDiffTime(Math.floor((new Date(data.resend_time) - new Date())/1000))
+        } else {
+            console.log(data.status)
+        }
+    }
     const send = async () => {
         setLoading(true)
         if(step === 1){
@@ -97,6 +117,12 @@ const Index = () => {
             Router.push('/')
         }
     },[]);
+    useEffect(()=>{
+        setTimeout(()=>{
+            setDiffTime(Math.floor((new Date(time) - new Date())/1000))
+            setWatch(`${Math.floor(diffTime/60)}:${diffTime%60}`)
+        }, 1000)
+    }, [diffTime])
     return (
         <div className=" bg-slate-200">
             <div className="w-full min-h-screen flex justify-center items-center md:w-6/12 mx-auto">
@@ -160,6 +186,11 @@ const Index = () => {
                             <span>
                                 <input type="checkbox" className="ml-5" onClick={()=>setCbPassword(!cbPassword)} value={cbPassword} checked={cbPassword} id="cbPassword"/>
                                 <span className="ml-2 text-slate-600 text-sm" onClick={()=>setCbPassword(!cbPassword)}>Lihat Password</span>
+                            </span>
+                        )}
+                        {step === 2 && (
+                            <span className="text-blue-500 ml-5">
+                                Didn't Receive Code ? <button disabled={diffTime > 0} onClick={()=>resendCode({forgetPassword:false})} className="text-white bg-blue-500 px-2 p-1 rounded-full hover:cursor-pointer hover:bg-blue-600">{diffTime > 0 ? watch: 'Resend'}</button>
                             </span>
                         )}
                         <button disabled={step === 1 && !validateEmail(form.email) || step === 2 && form.code < 100000 || step === 2 && form.code > 999999 || step === 3 && form.password !== form.rePassword || step === 3 && form.password.length < 8 || loading || step === 4 && form.password.length < 8} className="py-2 px-5  rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 block ml-auto" onClick={send}>{loading ? 'Loading...':'Send'}</button>
