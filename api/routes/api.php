@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::post('/register',[LogController::class,'register']);
 Route::post('/login',[LogController::class,'login']);
 Route::post('/code',[LogController::class,'validateCode']);
 Route::post('/code/{user:email}',[LogController::class,'resendCode']);
 Route::post('/set-password',[LogController::class,'setPassword']);
 Route::post('/reset-password/{user:email}',[LogController::class,'resetPassword']);
+
+Route::group(['middleware'=>'auth:sanctum'], function (){
+    Route::get('/user',[LogController::class,'user']);
+    Route::post('/change-password',[LogController::class,'changePassword']);
+});

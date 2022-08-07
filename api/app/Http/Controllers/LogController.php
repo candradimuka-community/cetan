@@ -187,6 +187,7 @@ class LogController extends Controller
         try {
             if($user->can_reset_password == 'pending'){
                 $user->password = Hash::make($request->password);
+                $user->can_reset_password = 'false';
                 $user->save();
                 return response()->json([
                     'status'=>'Password reset successfully',
@@ -203,5 +204,43 @@ class LogController extends Controller
                 'status'=>'Internal Server Error'
             ],500);
         }
+    }
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password'=>'required|min:8',
+            'newPassword'=>'required|min:8'
+        ]);
+        try {
+            if(Hash::check($request->password, $request->user()->password)){
+                if($request->password == $request->newPassword){
+                    return response()->json([
+                        'status'=>"new password can't same with old password"
+                    ],422);
+                } else {
+                    $user = $request->user();
+                    $user->password = Hash::make($request->newPassword);
+                    $user->save();
+                    return response()->json([
+                        'status'=>'Password reset successfully'
+                    ],200);
+                }
+            } else {
+                return response()->json([
+                    'status'=>"Wrong Password"
+                ],422);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'=>'Internal Server Error'
+            ],500);
+        }
+    }
+    public function user(Request $request)
+    {
+        return response()->json([
+            'status'=>'authenticated',
+            'data'=>$request->user()
+        ],200);
     }
 }
