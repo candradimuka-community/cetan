@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Mail\SendCodeMail;
 use Illuminate\Http\Request;
@@ -144,6 +145,28 @@ class LogController extends Controller
             return response()->json([
                 'status'=>'Wrong Password'
             ],422);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'=>'Internal Server Error'
+            ],500);
+        }
+    }
+    public function resendCode(Request $request, User $user)
+    {
+        try {
+            if($user->updated_at->addMinutes(5) < Carbon::now()){
+                $user->code = random_int(100000,999999);
+                $user->save();
+                Mail::to($user->email)->send(new SendCodeMail($user->email, $user->code));
+                return response()->json([
+                    'status'=>'email sended',
+                    'resend_time'=>Carbon::now()->addMinutes(5)
+                ],200);
+            } else {
+                return response()->json([
+                    'status'=>'too many email request'
+                ],422);
+            }
         } catch (\Throwable $th) {
             return response()->json([
                 'status'=>'Internal Server Error'
