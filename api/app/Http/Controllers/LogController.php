@@ -66,7 +66,7 @@ class LogController extends Controller
                 return response()->json([
                     'status'=>'Code Validated',
                     'data'=>$user
-                ]);
+                ], 200);
             } else {
                 return response()->json([
                     'status'=>'Code Invalid'

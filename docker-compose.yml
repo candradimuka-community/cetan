@@ -63,7 +63,7 @@ services:
       ENV_VARIABLE: ${ENV_VARIABLE}
       NEXT_PUBLIC_ENV_VARIABLE: ${NEXT_PUBLIC_ENV_VARIABLE}
       CHOKIDAR_USEPOLLING: "true"
-      API_HOST: ${API_HOST}
+      NEXT_PUBLIC_API_HOST: ${NEXT_PUBLIC_API_HOST}
     volumes:
       - ./ui:/app/ui
       - /app/ui/node_modules
