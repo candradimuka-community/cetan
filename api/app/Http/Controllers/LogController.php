@@ -157,7 +157,7 @@ class LogController extends Controller
     public function resendCode(Request $request, User $user)
     {
         try {
-            if($user->updated_at->addMinutes(5) < Carbon::now()){
+            if($user->updated_at->addMinutes(5) < Carbon::now() || $user->updated_at == $user->created_at){
                 if(isset($request->forgetPassword) && $request->forgetPassword == true && $user->can_reset_password == 'false'){
                     $user->can_reset_password = 'true';
                 }
