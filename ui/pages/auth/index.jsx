@@ -20,6 +20,7 @@ const Index = () => {
     const resendCode = async ({
             forgetPassword=false
         }) => {
+        setLoading(true)
         const { status, data } = await Api({
             path: "code/"+form.email,
             method: "POST",
@@ -30,8 +31,10 @@ const Index = () => {
         if (status === 200){
             setTime(new Date(data.resend_time))
             setDiffTime(Math.floor((new Date(data.resend_time) - new Date())/1000))
+            setLoading(false)
         } else {
             console.log(data.status)
+            setLoading(false)
         }
     }
     const send = async () => {
@@ -190,7 +193,7 @@ const Index = () => {
                         )}
                         {step === 2 && (
                             <span className="text-blue-500 ml-5">
-                                Didn't Receive Code ? <button disabled={diffTime > 0} onClick={()=>resendCode({forgetPassword:false})} className="text-white bg-blue-500 px-2 p-1 rounded-full hover:cursor-pointer hover:bg-blue-600">{diffTime > 0 ? watch: 'Resend'}</button>
+                                Didn't Receive Code ? <button disabled={diffTime > 0 || loading} onClick={()=>resendCode({forgetPassword:false})} className="text-white bg-blue-500 px-2 p-1 rounded-full hover:cursor-pointer hover:bg-blue-600">{diffTime > 0 ? watch: 'Resend'}</button>
                             </span>
                         )}
                         <button disabled={step === 1 && !validateEmail(form.email) || step === 2 && form.code < 100000 || step === 2 && form.code > 999999 || step === 3 && form.password !== form.rePassword || step === 3 && form.password.length < 8 || loading || step === 4 && form.password.length < 8} className="py-2 px-5  rounded-full bg-blue-600 text-white font-semibold hover:bg-blue-700 block ml-auto" onClick={send}>{loading ? 'Loading...':'Send'}</button>
