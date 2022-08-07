@@ -62,6 +62,9 @@ class LogController extends Controller
                 ],400);
             }
             if($user->code == $request->code){
+                if($user->can_reset_password == 'true'){
+                    $user->can_reset_password = 'pending';
+                }
                 $user->email_verified_at = now();
                 $user->save();
                 return response()->json([
@@ -155,6 +158,9 @@ class LogController extends Controller
     {
         try {
             if($user->updated_at->addMinutes(5) < Carbon::now()){
+                if(isset($request->forgetPassword) && $request->forgetPassword == true && $user->can_reset_password == 'false'){
+                    $user->can_reset_password = 'true';
+                }
                 $user->code = random_int(100000,999999);
                 $user->save();
                 Mail::to($user->email)->send(new SendCodeMail($user->email, $user->code));
@@ -165,6 +171,31 @@ class LogController extends Controller
             } else {
                 return response()->json([
                     'status'=>'too many email request'
+                ],422);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'=>'Internal Server Error'
+            ],500);
+        }
+    }
+    public function resetPassword(Request $request, User $user)
+    {
+        $request->validate([
+            'password'=>'required|min:8'
+        ]);
+        try {
+            if($user->can_reset_password == 'pending'){
+                $user->password = Hash::make($request->password);
+                $user->save();
+                return response()->json([
+                    'status'=>'Password reset successfully',
+                    'data'=>$user,
+                    'token'=>$user->createToken('Cetan-App')->plainTextToken
+                ],200);
+            } else {
+                return response()->json([
+                    'status'=>'you dont have request to reset password'
                 ],422);
             }
         } catch (\Throwable $th) {

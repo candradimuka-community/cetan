@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('can_reset_password')->default(false);
+            $table->enum('can_reset_password', ['false','pending','true'])->default('false');
         });
     }
 
