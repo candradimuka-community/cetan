@@ -26,4 +26,10 @@ Route::post('/reset-password/{user:email}',[LogController::class,'resetPassword'
 Route::group(['middleware'=>'auth:sanctum'], function (){
     Route::get('/user',[LogController::class,'user']);
     Route::post('/change-password',[LogController::class,'changePassword']);
+
+
+    Route::post('/user', [RoomController::class,'userList']);
+    Route::get('/room', [RoomController::class,'roomList']);
+    Route::post('/room', [RoomController::class,'createRoom']);
+    Route::get('/room/{room}', [RoomController::class,'roomDetail']);
 });
