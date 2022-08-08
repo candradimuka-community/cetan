@@ -27,6 +27,13 @@ export const Api = async ({
     
     if(response.status === 401){
         // code if unauthenticated
+        localStorage.removeItem('token')
+        return {
+            status :401,
+            data: {
+                status : 'unauthenticated'
+            }
+        }
     } else {
         console.log(response);
         return response

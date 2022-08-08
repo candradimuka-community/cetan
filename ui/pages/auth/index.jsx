@@ -3,8 +3,10 @@ import FormEl from "../../components/formEl"
 import Title from "../../components/title"
 import { Api }  from "../../hooks/Api"
 import Router from "next/router"
+import UseUserContext from "../../context/useUserContext"
 
 const Index = () => {
+    const {action, state} = UseUserContext()
     const [step, setStep] = useState(1)
     const [form, setForm] = useState({
         email:'',
@@ -16,7 +18,7 @@ const Index = () => {
     const [diffTime, setDiffTime] = useState(0)
     const [watch, setWatch] = useState('0:0')
     const [cbPassword, setCbPassword] = useState(false)
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(state.loading)
     const [pw, setPw] = useState(true)
     const resendCode = async ({
             forgetPassword=false
@@ -120,11 +122,11 @@ const Index = () => {
         );
     };
     useEffect(() => {
-        const token = localStorage.getItem('token')
-        if(token){
+        if(state.login === true){
             Router.push('/')
         }
-    },[]);
+        setLoading(state.loading)
+    },[state]);
     useEffect(()=>{
         setTimeout(()=>{
             setDiffTime(Math.floor((new Date(time) - new Date())/1000))
@@ -145,6 +147,7 @@ const Index = () => {
                             value={form.email}
                             error={form.email.length > 1 && !validateEmail(form.email)}
                             errorMessage="Not Valid Email"
+                            disabled={state.loading}
                         />
                     )}
                     {step === 2 && (
