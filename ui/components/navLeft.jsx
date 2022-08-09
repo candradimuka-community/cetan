@@ -3,7 +3,7 @@ const NavLeft = ({
     setShowLeftExtraNav
 }) => {
     return (
-        <section id="nav-left" className="flex justify-between items-center px-5 py-2 bg-slate-100 border-r-2 border-slate-400 relative">
+        <section id="nav-left" className="flex justify-between items-center px-5 py-2 bg-slate-100 relative h-14">
             <div className="bg-slate-900 h-10 w-10 rounded-full">
 
             </div>
@@ -18,7 +18,7 @@ const NavLeft = ({
                 </div>
             </div>
             {showLeftExtraNav && (
-                <div className="absolute bg-slate-100 rounded-md border border-slate-400 w-1/2 px-3 py-2 top-12 right-5 flex flex-col gap-2" onClick={(e)=>{
+                <div className="absolute bg-slate-50 rounded-md border border-slate-400 w-1/2 px-3 py-2 top-12 right-5 flex flex-col gap-2" onClick={(e)=>{
                     e.stopPropagation()
                 }}>
                     <p className="hover:cursor-pointer">Account Setting</p>
