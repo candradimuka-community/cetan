@@ -1,11 +1,14 @@
 import '../styles/globals.css'
-import UseUserContext, {UserProvider} from '../context/useUserContext'
+import {UserProvider} from '../context/useUserContext'
+import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {
-    const tes = UseUserContext()
-    console.log(tes)
     return (
         <UserProvider>
+            <Head>
+                <title>Cetan Apps</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
             <Component {...pageProps} />
         </UserProvider>
     )
