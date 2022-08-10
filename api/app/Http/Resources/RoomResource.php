@@ -18,7 +18,8 @@ class RoomResource extends JsonResource
         return [
             'id_room'=>$this->id,
             'self'=>new UserResource(User::find($request->user()->id)),
-            'opponent'=>new UserResource(User::find($this->user_1_id == $request->user()->id ? $this->user_2_id : $this->user_1_id))
+            'opponent'=>new UserResource(User::find($this->user_1_id == $request->user()->id ? $this->user_2_id : $this->user_1_id)),
+            'last_active'=>$this->updated_at->diffForHumans()
         ];
     }
 }
