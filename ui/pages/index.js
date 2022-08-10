@@ -3,6 +3,7 @@ import Router from "next/router";
 import UseUserContext from "../context/useUserContext";
 import NavLeft from "../components/navLeft";
 import FormEl from "../components/formEl"
+import { UserIcon } from "@heroicons/react/outline";
 
 const Index = () => {
     const {action, state} = UseUserContext()
@@ -83,9 +84,9 @@ const Index = () => {
                 </div>
                 <div className={`overflow-y-scroll scrollbar max-h-[510px]`}>
                     {dummy.map((item, index)=>(
-                        <div className="grid grid-cols-4 px-5 bg-white hover:bg-slate-100" key={index}>
-                            <div className="bg-slate-100 my-3 h-12 w-12 rounded-full flex justify-center text-4xl">
-                                {item.email[0]}
+                        <div className="grid grid-cols-4 px-5 bg-white hover:bg-slate-100 hover:cursor-pointer" key={index}>
+                            <div className="bg-slate-100 my-3 h-12 w-12 rounded-full flex justify-center items-center">
+                                <UserIcon className="h-6 w-6 text-black"/>
                             </div>
                             <div className="col-span-3 border-b border-slate-300 flex flex-col justify-evenly">
                                 <div className="flex justify-between">

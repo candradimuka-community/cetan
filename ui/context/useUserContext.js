@@ -8,6 +8,15 @@ export const UserProvider = ({children}) => {
     const [token, setToken] = useState('')
     const [loading, setLoading] = useState(false)
     const getUser = async (token) => {
+        const getRoomList = async (token) => {
+            const { status, data } = await Api({
+                path:'room',
+                method: 'GET',
+                token: token
+            })
+            console.log(status, data)
+            setLoading(false)
+        }
         const { status, data } = await Api({
             path:'user',
             method: 'GET',
@@ -16,11 +25,13 @@ export const UserProvider = ({children}) => {
         if(status === 200){
             setLogin(true)
             setUser(data.data)
-            setLoading(false)
+            getRoomList(token)
         } else {
             setLoading(false)
         }
     }
+
+
     const share = {
             action: {
                 setUser,
