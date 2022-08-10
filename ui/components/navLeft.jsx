@@ -3,7 +3,9 @@ import { DotsVerticalIcon, UserIcon, ChatIcon } from "@heroicons/react/outline"
 
 const NavLeft = ({
     showLeftExtraNav,
-    setShowLeftExtraNav
+    setShowLeftExtraNav,
+    leftSlider,
+    setLeftSlider
 }) => {
     const { action, state } = UseUserContext()
     return (
@@ -12,7 +14,7 @@ const NavLeft = ({
                 <UserIcon className="h-5 w-5 text-black"/>
             </div>
             <div className="flex justify-between items-center gap-4">
-                <div className="h-10 w-10 rounded-full flex justify-center items-center border-slate-100 border-2 hover:border-slate-700 active:bg-slate-600">
+                <div onClick={()=>setLeftSlider(!leftSlider)} className="h-10 w-10 rounded-full flex justify-center items-center border-slate-100 border-2 hover:border-slate-700 active:bg-slate-600">
                     <ChatIcon className="h-5 w-5 text-black" />
                 </div>
                 <div onClick={(e)=>{

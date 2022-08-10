@@ -8,18 +8,24 @@ export const UserProvider = ({children}) => {
     const [token, setToken] = useState('')
     const [loading, setLoading] = useState(false)
     const [room, setRoom] = useState([])
-    const getUser = async (token) => {
-        const getRoomList = async (token) => {
-            const { status, data } = await Api({
-                path:'room',
-                method: 'GET',
-                token: token
-            })
-            setLoading(false)
-            if(status === 200){
-                setRoom(data.data)
-            }
+    const [users, setUsers] = useState([])
+    const [param, setParam] = useState('')
+    const [height, setHeight] = useState(600)
+    const [chatRoom, setChatRoom] = useState({
+        id:0
+    })
+    const getRoomList = async (token) => {
+        const { status, data } = await Api({
+            path:'room',
+            method: 'GET',
+            token: token
+        })
+        setLoading(false)
+        if(status === 200){
+            setRoom(data.data)
         }
+    }
+    const getUser = async (token) => {
         const { status, data } = await Api({
             path:'user',
             method: 'GET',
@@ -27,34 +33,75 @@ export const UserProvider = ({children}) => {
         })
         if(status === 200){
             setLogin(true)
+            setToken(token)
             setUser(data.data)
             getRoomList(token)
         } else {
             setLoading(false)
         }
     }
-
-
+    const getUsers = async (param) => {
+        const { status, data } = await Api({
+            path:'user',
+            method: 'POST',
+            data: {
+                email : param
+            },
+            token: token
+        })
+        if(status === 200){
+            setUsers(data.data)
+        }
+    }
+    const createRoom = async (id) => {
+        const {status, data} = await Api({
+            path:'room',
+            method: 'POST',
+            data: {
+                opponent: id
+            },
+            token
+        })
+        if (status === 200 || status === 201){
+            setChatRoom(data.data)
+            getRoomList(token)
+        } else {
+            console.log(data)
+        }
+    }
     const share = {
             action: {
                 setUser,
                 setLogin,
                 setToken,
                 setLoading,
-                setRoom
+                setRoom,
+                setUsers,
+                setParam,
+                getUsers,
+                setHeight,
+                setChatRoom,
+                createRoom
             },
             state : {
                 user,
                 login,
                 token,
                 loading,
-                room
+                room,
+                users,
+                param,
+                height,
+                chatRoom
             }
         }
     useEffect(()=>{
         if(localStorage.getItem('token')){
             getUser(localStorage.getItem('token'))
             setLoading(true)
+        }
+        if(typeof window !== 'undefined'){
+            setHeight(window.innerHeight - 138)
         }
     },[])
     return (

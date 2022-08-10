@@ -6,7 +6,7 @@ const Spinner = () => {
         return (<></>)
     }
     return (
-        <div className="w-screen h-screen flex justify-center items-center z-50 bg-slate-200">
+        <div className="fixed w-screen h-screen flex justify-center items-center z-50 bg-slate-200">
             <button type="button" className="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed" disabled="">
                 <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
