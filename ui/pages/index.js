@@ -9,48 +9,7 @@ const Index = () => {
     const {action, state} = UseUserContext()
     const [showLeftExtraNav, setShowLeftExtraNav] = useState(false)
     const [search, setSearch] = useState('')
-    const [dummy, setDummy] = useState([
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-        {
-            email: 'saha ieu',
-            time: '17.00',
-            message: 'cuma design'
-        },
-    ])
+    const [room, setRoom] = useState(state.room)
     useEffect(() => {
         const token = localStorage.getItem('token')
         if(!token){
@@ -66,6 +25,9 @@ const Index = () => {
             Router.push('/auth')
         }
     }, [state])
+    useEffect(()=>{
+        setRoom(state.room.filter(item => item.opponent.email.toLowerCase().includes(search)))
+    }, [state, search])
     return (
         <div className="grid grid-cols-10 h-screen">
             <div className="col-span-3 border-r border-slate-400 flex flex-col">
@@ -82,16 +44,16 @@ const Index = () => {
                         value={search}
                     />
                 </div>
-                <div className={`overflow-y-scroll scrollbar max-h-[510px]`}>
-                    {dummy.map((item, index)=>(
-                        <div className="grid grid-cols-4 px-5 bg-white hover:bg-slate-100 hover:cursor-pointer" key={index}>
+                <div className={`overflow-y-auto scrollbar max-h-[510px]`}>
+                    {room.map((item, index)=>(
+                        <div className="grid grid-cols-4 px-5 bg-white hover:bg-slate-100 hover:cursor-pointer" key={item.id_room}>
                             <div className="bg-slate-100 my-3 h-12 w-12 rounded-full flex justify-center items-center">
                                 <UserIcon className="h-6 w-6 text-black"/>
                             </div>
                             <div className="col-span-3 border-b border-slate-300 flex flex-col justify-evenly">
                                 <div className="flex justify-between">
-                                    <span className="text-xl">{item.email}</span>
-                                    <span>{item.time}</span>
+                                    <span className="">{item.opponent.email}</span>
+                                    <span>{item.last_active}</span>
                                 </div>
                                 <p className="text-sm text-slate-500">{item.message}</p>
                             </div>

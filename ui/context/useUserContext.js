@@ -7,6 +7,7 @@ export const UserProvider = ({children}) => {
     const [login, setLogin] = useState(false)
     const [token, setToken] = useState('')
     const [loading, setLoading] = useState(false)
+    const [room, setRoom] = useState([])
     const getUser = async (token) => {
         const getRoomList = async (token) => {
             const { status, data } = await Api({
@@ -14,8 +15,10 @@ export const UserProvider = ({children}) => {
                 method: 'GET',
                 token: token
             })
-            console.log(status, data)
             setLoading(false)
+            if(status === 200){
+                setRoom(data.data)
+            }
         }
         const { status, data } = await Api({
             path:'user',
@@ -36,13 +39,16 @@ export const UserProvider = ({children}) => {
             action: {
                 setUser,
                 setLogin,
-                setToken
+                setToken,
+                setLoading,
+                setRoom
             },
             state : {
                 user,
                 login,
                 token,
-                loading
+                loading,
+                room
             }
         }
     useEffect(()=>{
