@@ -2,8 +2,6 @@ import UseUserContext from "../context/useUserContext"
 import { DotsVerticalIcon, UserIcon, ChatIcon } from "@heroicons/react/outline"
 
 const NavLeft = ({
-    showLeftExtraNav,
-    setShowLeftExtraNav,
     leftSlider,
     setLeftSlider
 }) => {
@@ -19,12 +17,14 @@ const NavLeft = ({
                 </div>
                 <div onClick={(e)=>{
                     e.stopPropagation()
-                    setShowLeftExtraNav(!showLeftExtraNav)
-                    }} className={`h-10 w-10 rounded-full flex justify-center items-center border-slate-100 border-2 hover:border-slate-700 ${showLeftExtraNav ? 'bg-slate-600':'active:bg-slate-600'}`}>
+                    action.setShowLeftExtraNav(!state.showLeftExtraNav)
+                    action.setSearchBox(false)
+                    action.setOptionBox(false)
+                    }} className={`h-10 w-10 rounded-full flex justify-center items-center border-slate-100 border-2 hover:border-slate-700 ${state.showLeftExtraNav ? 'bg-slate-600':'active:bg-slate-600'}`}>
                     <DotsVerticalIcon className="h-5 w-5 text-black"/>
                 </div>
             </div>
-            {showLeftExtraNav && (
+            {state.showLeftExtraNav && (
                 <div className="absolute bg-slate-50 rounded-md border border-slate-400 w-1/2 px-3 py-2 top-12 right-5 flex flex-col gap-2" onClick={(e)=>{
                     e.stopPropagation()
                 }}>

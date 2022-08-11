@@ -14,6 +14,9 @@ export const UserProvider = ({children}) => {
     const [chatRoom, setChatRoom] = useState({
         id:0
     })
+    const [searchBox, setSearchBox] = useState(false)
+    const [optionBox, setOptionBox] = useState(false)
+    const [showLeftExtraNav, setShowLeftExtraNav] = useState(false)
     const getRoomList = async (token) => {
         const { status, data } = await Api({
             path:'room',
@@ -81,7 +84,10 @@ export const UserProvider = ({children}) => {
                 getUsers,
                 setHeight,
                 setChatRoom,
-                createRoom
+                createRoom,
+                setSearchBox,
+                setOptionBox,
+                setShowLeftExtraNav
             },
             state : {
                 user,
@@ -92,7 +98,10 @@ export const UserProvider = ({children}) => {
                 users,
                 param,
                 height,
-                chatRoom
+                chatRoom,
+                searchBox,
+                optionBox,
+                showLeftExtraNav
             }
         }
     useEffect(()=>{
