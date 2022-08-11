@@ -2,11 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use App\Models\Message;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RoomResource extends JsonResource
+class MessageResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,9 +17,13 @@ class RoomResource extends JsonResource
     {
         return [
             'id'=>$this->id,
-            'opponent'=>new UserResource(User::find($this->user_1_id == $request->user()->id ? $this->user_2_id : $this->user_1_id)),
-            'last_active'=>$this->updated_at->diffForHumans(),
-            'last_message'=>new MessageResource(Message::where('room_id',$this->id)->orderBy('id','desc')->first())
+            'body'=>$this->body,
+            'room_id'=>$this->room_id,
+            'user_id'=>$this->user_id,
+            'readed'=>$this->readed,
+            'readed_at'=>$this->readed_at,
+            'time'=>$this->created_at,
+            'parent'=>$this->message_id != null ? new MessageResource(Message::find($this->message_id)) : []
         ];
     }
 }

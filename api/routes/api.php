@@ -32,4 +32,8 @@ Route::group(['middleware'=>'auth:sanctum'], function (){
     Route::get('/room', [RoomController::class,'roomList']);
     Route::post('/room', [RoomController::class,'createRoom']);
     Route::get('/room/{room}', [RoomController::class,'roomDetail']);
+
+
+    Route::post('/message', [MessageController::class,'store']);
+    Route::delete('/message/{message}', [MessageController::class,'deleteMessage']);
 });

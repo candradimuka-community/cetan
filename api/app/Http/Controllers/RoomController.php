@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Http\Resources\RoomResource;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\MessageResource;
 
 class RoomController extends Controller
 {
@@ -86,8 +88,8 @@ class RoomController extends Controller
                 'status'=>'You are not in this room'
             ],422);
         }
-        return (new RoomResource($room))
+        return (MessageResource::collection(Message::where('room_id',$room->id)->paginate(10)))
                 ->response()
-                ->setStatusCode(201);
+                ->setStatusCode(200);
     }
 }
