@@ -88,7 +88,7 @@ class RoomController extends Controller
                 'status'=>'You are not in this room'
             ],422);
         }
-        return (MessageResource::collection(Message::where('room_id',$room->id)->paginate(10)))
+        return (MessageResource::collection(Message::where('room_id',$room->id)->orderBy('id','desc')->paginate(10)))
                 ->response()
                 ->setStatusCode(200);
     }

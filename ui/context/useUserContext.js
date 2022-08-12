@@ -17,6 +17,9 @@ export const UserProvider = ({children}) => {
     const [searchBox, setSearchBox] = useState(false)
     const [optionBox, setOptionBox] = useState(false)
     const [showLeftExtraNav, setShowLeftExtraNav] = useState(false)
+    const [dataMessage, setDataMessage] = useState([
+
+    ])
     const getRoomList = async (token) => {
         const { status, data } = await Api({
             path:'room',
@@ -72,6 +75,36 @@ export const UserProvider = ({children}) => {
             console.log(data)
         }
     }
+    const getDataMessage = async (id) => {
+        const {status, data} = await Api({
+            path:'room/'+id,
+            method: 'GET',
+            token
+        })
+        const temp = {
+            id: id,
+            message: data.data,
+            next_url: data.links.next
+        }
+        setDataMessage([...dataMessage, temp])
+    }
+    const postMessage = async (form) => {
+        const {status, data} = await Api({
+            path:'message',
+            method:'POST',
+            data: form,
+            token
+        })
+        console.log(status,data)
+        if(status === 201 || status === 200){
+            dataMessage.forEach(item => {
+                if(item.id === form.room_id){
+                    item.message = [data.data, ...item.message]
+                }
+            })
+            setDataMessage(...dataMessage)
+        }
+    }
     const share = {
             action: {
                 setUser,
@@ -87,7 +120,9 @@ export const UserProvider = ({children}) => {
                 createRoom,
                 setSearchBox,
                 setOptionBox,
-                setShowLeftExtraNav
+                setShowLeftExtraNav,
+                setDataMessage,
+                postMessage
             },
             state : {
                 user,
@@ -101,7 +136,8 @@ export const UserProvider = ({children}) => {
                 chatRoom,
                 searchBox,
                 optionBox,
-                showLeftExtraNav
+                showLeftExtraNav,
+                dataMessage
             }
         }
     useEffect(()=>{
@@ -113,6 +149,14 @@ export const UserProvider = ({children}) => {
             setHeight(window.innerHeight - 138)
         }
     },[])
+    useEffect(()=>{
+        if(chatRoom.id !== 0){
+            const search = dataMessage.filter(item => item.id === chatRoom.id)
+            if(search.length === 0){
+                getDataMessage(chatRoom.id)
+            }
+        }
+    }, [chatRoom])
     return (
         <UserContext.Provider value={share}>
             {children}

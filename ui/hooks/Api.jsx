@@ -27,10 +27,10 @@ export const Api = async ({
     
     if(response.status === 401){
         // code if unauthenticated
-        localStorage.removeItem('token')
-        if(typeof window !== 'undefined'){
-            window.location.reload()
-        }
+        // localStorage.removeItem('token')
+        // if(typeof window !== 'undefined'){
+        //     window.location.reload()
+        // }
         return {
             status :401,
             data: {
