@@ -6,10 +6,13 @@ import FormEl from "../components/formEl"
 import { CheckIcon, ClockIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/outline";
 import LeftSlider from "../components/leftSlider";
 import NavRight from "../components/navRight";
+import { useInView } from 'react-intersection-observer';
 
 const Index = () => {
     const {action, state} = UseUserContext()
-    
+    const { ref, inView } = useInView({
+        threshold: 0
+    });
     const [search, setSearch] = useState('')
     const [room, setRoom] = useState(state.room)
     const [leftSlider, setLeftSlider] = useState(false)
@@ -147,10 +150,11 @@ const Index = () => {
                         </div>
                     ))}
                     {message.next_url && (
-                        <div onClick={()=>{
-                            action.getNextDataMessage(message.id, message.next_url.split(process.env.NEXT_PUBLIC_API_HOST)[1])
-                        }} className="self-center bg-slate-100 px-5 py-1 my-2 rounded-full cursor-pointer">
-                            Load More ....
+                        <div ref={ref} className="self-center bg-slate-100 px-5 py-1 my-2 rounded-full disabled">
+                            Load More .... {inView && state.nextLink.url !==message.next_url.split(process.env.NEXT_PUBLIC_API_HOST)[1] && action.setNextLink({
+                                id: message.id,
+                                url: message.next_url.split(process.env.NEXT_PUBLIC_API_HOST)[1]
+                            })}
                         </div>
                     )}
                 </div>

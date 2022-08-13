@@ -20,6 +20,9 @@ export const UserProvider = ({children}) => {
     const [dataMessage, setDataMessage] = useState([
 
     ])
+    const [nextLink, setNextLink] = useState({
+        id:''
+    })
     const getRoomList = async (token) => {
         const { status, data } = await Api({
             path:'room',
@@ -144,7 +147,8 @@ export const UserProvider = ({children}) => {
                 setShowLeftExtraNav,
                 setDataMessage,
                 postMessage,
-                getNextDataMessage
+                getNextDataMessage,
+                setNextLink
             },
             state : {
                 user,
@@ -159,7 +163,8 @@ export const UserProvider = ({children}) => {
                 searchBox,
                 optionBox,
                 showLeftExtraNav,
-                dataMessage
+                dataMessage,
+                nextLink
             }
         }
     useEffect(()=>{
@@ -179,6 +184,12 @@ export const UserProvider = ({children}) => {
             }
         }
     }, [chatRoom])
+    useEffect(()=>{
+        if(nextLink.id !== ''){
+            getNextDataMessage(nextLink.id, nextLink.url)
+        }
+        console.log(nextLink)
+    }, [nextLink])
     return (
         <UserContext.Provider value={share}>
             {children}
