@@ -81,12 +81,33 @@ export const UserProvider = ({children}) => {
             method: 'GET',
             token
         })
-        const temp = {
-            id: id,
-            message: data.data,
-            next_url: data.links.next
+        if(status === 200 || status === 201 ){
+            const temp = {
+                id: id,
+                message: data.data,
+                next_url: data.links.next
+            }
+            setDataMessage([...dataMessage, temp])
         }
-        setDataMessage([...dataMessage, temp])
+    }
+    const getNextDataMessage = async (id, url) => {
+        const {status, data} = await Api({
+            path:url,
+            method: 'GET',
+            token
+        })
+        if(status === 200 || status === 201){
+            dataMessage.forEach(item =>{
+                if(item.id === id){
+                    item.next_url = data.links.next
+                    item.message = [
+                        ...item.message,
+                        ...data.data
+                    ]
+                }
+            })
+            setDataMessage([...dataMessage])
+        }
     }
     const postMessage = async (form) => {
         const {status, data} = await Api({
@@ -122,7 +143,8 @@ export const UserProvider = ({children}) => {
                 setOptionBox,
                 setShowLeftExtraNav,
                 setDataMessage,
-                postMessage
+                postMessage,
+                getNextDataMessage
             },
             state : {
                 user,

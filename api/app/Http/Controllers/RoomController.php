@@ -88,6 +88,13 @@ class RoomController extends Controller
                 'status'=>'You are not in this room'
             ],422);
         }
+        Message::where('room_id', $room->id)
+                ->where('user_id', '!=', $request->user()->id)
+                ->where('readed',false)
+                ->update([
+                    'readed'=>true,
+                    'readed_at'=>now()
+                ]);
         return (MessageResource::collection(Message::where('room_id',$room->id)->orderBy('id','desc')->paginate(10)))
                 ->response()
                 ->setStatusCode(200);

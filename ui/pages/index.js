@@ -53,6 +53,12 @@ const Index = () => {
             const temp = state.dataMessage.filter(item => item.id === state.chatRoom.id)
             if(temp.length > 0){
                 setMessage(temp[0])
+            } else {
+                setMessage({
+                    id: 0,
+                    message:[],
+                    next_url:''
+                })
             }
         }
         setForm({
@@ -117,27 +123,36 @@ const Index = () => {
                     maxHeight: state.height
                 }}>
                     {message.message.map((item, index)=>(
-                        <div className={`max-w-screen-md m-2 p-2 ${item.user_id === state.user.id ? 'bg-cyan-300 rounded-br-md rounded-tl-md self-end':'bg-lime-300 rounded-bl-md rounded-tr-md'}`}>
+                        <div className={`w-1/2 m-2 p-2 ${item.user_id === state.user.id ? 'bg-cyan-300 rounded-br-md rounded-tl-md self-end':'bg-lime-300 rounded-bl-md rounded-tr-md'}`}>
                             <p>{item.body}</p>
-                            <p className="text-sm flex justify-end items-center gap-2">
+                            <p className="text-sm flex justify-end items-center gap-2 w-full">
                                 <span>
                                     {item.time ? changeTime(item.time)[1] : 'Baru Saja'}
                                 </span>
-                                <span>
-                                    {!item.time ? (
-                                        <ClockIcon className="w-3 h-3 text-slate-600"/>
-                                    ) : (
-                                        <>
-                                            <CheckIcon className={`w-3 h-3 text-slate-600`} />
-                                            {item.readed === true && (
-                                                <CheckIcon className="w-3 h-3 text-slate-600" />
-                                            )}
-                                        </>
-                                    )}
-                                </span>
+                                {item.user_id === state.user.id && (
+                                    <span>
+                                        {!item.time ? (
+                                            <ClockIcon className="w-3 h-3 text-slate-600"/>
+                                        ) : (
+                                            <>
+                                                <CheckIcon className={`w-3 h-3 text-slate-600`} />
+                                                {item.readed === 1 && (
+                                                    <CheckIcon className="w-3 h-3 -mt-2 text-slate-600" />
+                                                )}
+                                            </>
+                                        )}
+                                    </span>
+                                )}
                             </p>
                         </div>
                     ))}
+                    {message.next_url && (
+                        <div onClick={()=>{
+                            action.getNextDataMessage(message.id, message.next_url.split(process.env.NEXT_PUBLIC_API_HOST)[1])
+                        }} className="self-center bg-slate-100 px-5 py-1 my-2 rounded-full cursor-pointer">
+                            Load More ....
+                        </div>
+                    )}
                 </div>
                 {state.chatRoom.id !== 0 && (
                     <div className="bg-slate-50 px-5 flex gap-5 items-center">
