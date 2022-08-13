@@ -40,7 +40,6 @@ const Index = () => {
             }
             setLoading(false)
         } else {
-            console.log(data.status)
             setLoading(false)
         }
     }
@@ -59,7 +58,6 @@ const Index = () => {
                 setStep(2)
                 setLoading(false)
             } else {
-                console.log(data.status)
                 setLoading(false)
             }
         } else if (step === 2){
@@ -72,7 +70,6 @@ const Index = () => {
                 setStep(3)
                 setLoading(false)
             } else {
-                console.log(data.status)
                 setLoading(false)
             }
         } else if (step === 3){
@@ -88,7 +85,6 @@ const Index = () => {
                     window.location.reload()
                 }
             } else {
-                console.log(data.status)
                 setLoading(false)
             }
         } else if (step === 4){
@@ -104,7 +100,6 @@ const Index = () => {
                     window.location.reload()
                 }
             } else {
-                console.log(data.status)
                 setLoading(false)
             }
         }

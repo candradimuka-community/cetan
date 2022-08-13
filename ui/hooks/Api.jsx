@@ -24,7 +24,7 @@ export const Api = async ({
         data,
         headers,
     }).catch((err) => err.response);
-    
+
     if(response.status === 401){
         // code if unauthenticated
         // localStorage.removeItem('token')
@@ -38,7 +38,6 @@ export const Api = async ({
             }
         }
     } else {
-        // console.log(response);
         return response
     }
 }

@@ -74,8 +74,6 @@ export const UserProvider = ({children}) => {
         if (status === 200 || status === 201){
             setChatRoom(data.data)
             getRoomList(token)
-        } else {
-            console.log(data)
         }
     }
     const getDataMessage = async (id) => {
@@ -188,7 +186,6 @@ export const UserProvider = ({children}) => {
         if(nextLink.id !== ''){
             getNextDataMessage(nextLink.id, nextLink.url)
         }
-        console.log(nextLink)
     }, [nextLink])
     return (
         <UserContext.Provider value={share}>
