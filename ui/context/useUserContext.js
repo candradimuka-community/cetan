@@ -95,14 +95,14 @@ export const UserProvider = ({children}) => {
             data: form,
             token
         })
-        console.log(status,data)
+        getRoomList(token)
         if(status === 201 || status === 200){
             dataMessage.forEach(item => {
                 if(item.id === form.room_id){
                     item.message = [data.data, ...item.message]
                 }
             })
-            setDataMessage(...dataMessage)
+            setDataMessage([...dataMessage])
         }
     }
     const share = {

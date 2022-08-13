@@ -3,7 +3,7 @@ import Router from "next/router";
 import UseUserContext from "../context/useUserContext";
 import NavLeft from "../components/navLeft";
 import FormEl from "../components/formEl"
-import { PaperAirplaneIcon, UserIcon } from "@heroicons/react/outline";
+import { CheckIcon, ClockIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/outline";
 import LeftSlider from "../components/leftSlider";
 import NavRight from "../components/navRight";
 
@@ -119,7 +119,23 @@ const Index = () => {
                     {message.message.map((item, index)=>(
                         <div className={`max-w-screen-md m-2 p-2 ${item.user_id === state.user.id ? 'bg-cyan-300 rounded-br-md rounded-tl-md self-end':'bg-lime-300 rounded-bl-md rounded-tr-md'}`}>
                             <p>{item.body}</p>
-                            <p className="text-sm text-right">{changeTime(item.time)[1]}</p>
+                            <p className="text-sm flex justify-end items-center gap-2">
+                                <span>
+                                    {item.time ? changeTime(item.time)[1] : 'Baru Saja'}
+                                </span>
+                                <span>
+                                    {!item.time ? (
+                                        <ClockIcon className="w-3 h-3 text-slate-600"/>
+                                    ) : (
+                                        <>
+                                            <CheckIcon className={`w-3 h-3 text-slate-600`} />
+                                            {item.readed === true && (
+                                                <CheckIcon className="w-3 h-3 text-slate-600" />
+                                            )}
+                                        </>
+                                    )}
+                                </span>
+                            </p>
                         </div>
                     ))}
                 </div>
@@ -135,10 +151,26 @@ const Index = () => {
                                     body: e.target.value
                                 })}
                                 value={form.body}
+                                onKeyDown={e=>{
+                                    if(e.key == 'Enter'){
+                                        document.getElementById('sendMessage').click()
+                                    }
+                                }}
                             /> 
                         </div>
 
-                        <div onClick={()=>{
+                        <div id="sendMessage" onClick={()=>{
+                            setMessage({
+                                ...message,
+                                message: [
+                                    {
+                                        id: 0,
+                                        user_id: state.user.id,
+                                        body: form.body
+                                    },
+                                    ...message.message
+                                ]
+                            })
                             setForm({
                                 ...form,
                                 body:''

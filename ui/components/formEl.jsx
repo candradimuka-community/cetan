@@ -7,7 +7,8 @@ const FormEl = ({
     error = false,
     disabled = false,
     readonly = false,
-    errorMessage = ""
+    errorMessage = "",
+    onKeyDown=null
 }) => {
     return (
         <>
@@ -20,6 +21,7 @@ const FormEl = ({
                 onChange={onChange}
                 value={value}
                 readOnly={readonly}
+                onKeyDown={onKeyDown}
                 />
             {error && (
                 <p className="text-red-500 text-sm ml-5">{errorMessage}</p>
