@@ -140,7 +140,10 @@ export const UserProvider = ({children}) => {
         if(status === 201 || status === 200){
             dataMessage.forEach(item => {
                 if(item.id === room){
-                    item.message = [data.data, ...item.message]
+                    const temp = item.message.filter(it=> it.id === data.data.id)
+                    if(!temp){
+                        item.message = [data.data, ...item.message]
+                    }
                 }
             })
             setDataMessage([...dataMessage])
@@ -165,7 +168,8 @@ export const UserProvider = ({children}) => {
                 setDataMessage,
                 postMessage,
                 getNextDataMessage,
-                setNextLink
+                setNextLink,
+                setUpdateData
             },
             state : {
                 user,
@@ -181,11 +185,12 @@ export const UserProvider = ({children}) => {
                 optionBox,
                 showLeftExtraNav,
                 dataMessage,
-                nextLink
+                nextLink,
+                updateData
             }
         }
     useEffect(()=>{
-        if(localStorage.getItem('token')){
+        if(localStorage.getItem('token') && !user.id){
             getUser(localStorage.getItem('token'))
             setLoading(true)
         }
@@ -208,7 +213,10 @@ export const UserProvider = ({children}) => {
     }, [nextLink])
     useEffect(()=>{
         if(updateData.id !== 0 && updateData.room !== 0){
-            getOneMessage(updateData.id, updateData.room)
+            getRoomList(token)
+            if(chatRoom.id === updateData.room){
+                getOneMessage(updateData.id, updateData.room)
+            }
         }
     }, [updateData])
     return (

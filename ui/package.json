@@ -11,7 +11,9 @@
   "dependencies": {
     "@heroicons/react": "^1.0.6",
     "axios": "^0.27.2",
+    "laravel-echo": "^1.13.1",
     "next": "12.2.0",
+    "pusher-js": "^7.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-intersection-observer": "^9.4.0"

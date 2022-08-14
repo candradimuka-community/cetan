@@ -7,6 +7,18 @@ import { CheckIcon, ClockIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/re
 import LeftSlider from "../components/leftSlider";
 import NavRight from "../components/navRight";
 import { useInView } from 'react-intersection-observer';
+import Echo from 'laravel-echo';
+
+if (typeof window !== 'undefined') {
+    window.Pusher = require('pusher-js');
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: process.env.NEXT_PUBLIC_MIX_PUSHER_APP_KEY,
+        cluster: process.env.NEXT_PUBLIC_MIX_PUSHER_APP_CLUSTER,
+        forceTLS: true
+    });
+}
 
 const Index = () => {
     const {action, state} = UseUserContext()
@@ -69,6 +81,18 @@ const Index = () => {
             room_id: state.chatRoom.id
         })
     }, [state])
+    if(typeof window !== 'undefined'){
+        window.Echo.channel(`Cetan-${state.user.id}`)
+            .listen('.NewMessage', (e) => {
+                // console.log(e);
+                if(state.updateData.id !== e.id || state.updateData.room !== e.room){
+                    action.setUpdateData({
+                        id: e.id,
+                        room: e.room
+                    })
+                }
+            });
+    }
     useEffect(()=>{
         setRoom(state.room.filter(item => item.opponent.email.toLowerCase().includes(search)))
     }, [state, search])
