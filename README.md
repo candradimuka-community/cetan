@@ -8,6 +8,13 @@ Cetan app is an aplication for realtime chatting
 - Git Bash
 - Docker Desktop
 - Email Account for sending mail with smtp. (need email and apps password). save it in env
+- env for websocket
+
+```
+PUSHER_APP_ID=whateveryouwant
+PUSHER_APP_KEY=whateveryouwant
+PUSHER_APP_SECRET=whateveryouwant
+```
 
 # Installation
 
