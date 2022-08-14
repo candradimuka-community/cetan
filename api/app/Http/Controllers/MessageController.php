@@ -58,7 +58,28 @@ class MessageController extends Controller
                 'status'=>'deleted'
             ], 200);
         } catch (\Throwable $th) {
-            return $th;
+            return response()->json([
+                'status'=>'Internal Server Error'
+            ],500);
+        }
+    }
+    public function getMessageById(Request $request, Message $message)
+    {
+        try {
+            $room = Room::find($message->room_id);
+            if(($room->user_1_id != $request->user()->id && $room->user_2_id != $request->user()->id) || $message->user_id == $request->user()->id)
+            {
+                return response()->json([
+                    'status'=>'No Content'
+                ], 204);
+            }
+            $message->readed = true;
+            $message->readed_at = now();
+            $message->save();
+            return (New MessageResource($message))
+                    ->response()
+                    ->setStatusCode(200);
+        } catch (\Throwable $th) {
             return response()->json([
                 'status'=>'Internal Server Error'
             ],500);
