@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Room;
 use App\Models\Message;
 use Illuminate\Http\Request;
+use App\Events\NewMessageEvent;
 use App\Http\Resources\MessageResource;
 
 class MessageController extends Controller
@@ -31,6 +32,8 @@ class MessageController extends Controller
             ]);
             $room->updated_at = now();
             $room->save();
+            $op = $room->user_1_id == $request->user()->id ? $room->user_2_id : $room->user_1_id;
+            broadcast(new NewMessageEvent($op, $message->id, $room->id));
             return (new MessageResource($message))
                     ->response()
                     ->setStatusCode(201);
@@ -67,7 +70,7 @@ class MessageController extends Controller
     {
         try {
             $room = Room::find($message->room_id);
-            if(($room->user_1_id != $request->user()->id && $room->user_2_id != $request->user()->id) || $message->user_id == $request->user()->id)
+            if(($room->user_1_id != $request->user()->id && $room->user_2_id != $request->user()->id))
             {
                 return response()->json([
                     'status'=>'No Content'

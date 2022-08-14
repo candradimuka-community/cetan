@@ -15,8 +15,10 @@ if (typeof window !== 'undefined') {
     window.Echo = new Echo({
         broadcaster: 'pusher',
         key: process.env.NEXT_PUBLIC_MIX_PUSHER_APP_KEY,
-        cluster: process.env.NEXT_PUBLIC_MIX_PUSHER_APP_CLUSTER,
-        forceTLS: true
+        wsHost: window.location.hostname,
+        wsPort: 6001,
+        forceTLS: false,
+        disableStats: true,
     });
 }
 
@@ -84,7 +86,6 @@ const Index = () => {
     if(typeof window !== 'undefined'){
         window.Echo.channel(`Cetan-${state.user.id}`)
             .listen('.NewMessage', (e) => {
-                // console.log(e);
                 if(state.updateData.id !== e.id || state.updateData.room !== e.room){
                     action.setUpdateData({
                         id: e.id,

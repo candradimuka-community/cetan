@@ -141,7 +141,7 @@ export const UserProvider = ({children}) => {
             dataMessage.forEach(item => {
                 if(item.id === room){
                     const temp = item.message.filter(it=> it.id === data.data.id)
-                    if(!temp){
+                    if(temp.length === 0){
                         item.message = [data.data, ...item.message]
                     }
                 }

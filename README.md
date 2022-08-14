@@ -34,6 +34,12 @@ example for get route list:
 docker container exec php php artisan route:list
 ```
 
+# Running websocket
+
+```
+docker container exec php php artisan websockets:serve
+```
+
 # ++ Feature
 
 - Hot Reload NextJs. you dont need rebuild container in development
@@ -45,6 +51,8 @@ docker container exec php php artisan route:list
 - For backend, use port 8000 or you just need open 127.0.0.1:8000 or http://localhost:8000
 
 - For documentaion,  open 127.0.0.1:8000/api/documentation or http://localhost:8000/api/documentation
+
+- For realtime socket dashboard, open 127.0.0.1/laravel-websockets
 
 
 # Contributing

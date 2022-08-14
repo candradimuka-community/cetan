@@ -29,6 +29,7 @@ services:
       - ./api:/app/api
     ports:
       - "8000:8000"
+      - "6001:6001"
     environment:
       APP_NAME: ${APP_NAME}
       APP_ENV: ${APP_ENV}
