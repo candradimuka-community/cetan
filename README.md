@@ -52,7 +52,7 @@ docker container exec php php artisan websockets:serve
 
 - For documentaion,  open 127.0.0.1:8000/api/documentation or http://localhost:8000/api/documentation
 
-- For realtime socket dashboard, open 127.0.0.1/laravel-websockets
+- For realtime socket dashboard, open 127.0.0.1:8000/laravel-websockets or http://localhost:8000/laravel-websockets
 
 
 # Contributing
