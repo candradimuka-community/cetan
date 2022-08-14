@@ -23,6 +23,10 @@ export const UserProvider = ({children}) => {
     const [nextLink, setNextLink] = useState({
         id:''
     })
+    const [updateData, setUpdateData] = useState({
+        id: 0,
+        room: 0
+    })
     const getRoomList = async (token) => {
         const { status, data } = await Api({
             path:'room',
@@ -127,6 +131,21 @@ export const UserProvider = ({children}) => {
             setDataMessage([...dataMessage])
         }
     }
+    const getOneMessage = async (id, room) => {
+        const {status, data} = await Api({
+            path:'message/'+id,
+            method:'GET',
+            token
+        })
+        if(status === 201 || status === 200){
+            dataMessage.forEach(item => {
+                if(item.id === room){
+                    item.message = [data.data, ...item.message]
+                }
+            })
+            setDataMessage([...dataMessage])
+        }
+    }
     const share = {
             action: {
                 setUser,
@@ -187,6 +206,11 @@ export const UserProvider = ({children}) => {
             getNextDataMessage(nextLink.id, nextLink.url)
         }
     }, [nextLink])
+    useEffect(()=>{
+        if(updateData.id !== 0 && updateData.room !== 0){
+            getOneMessage(updateData.id, updateData.room)
+        }
+    }, [updateData])
     return (
         <UserContext.Provider value={share}>
             {children}
