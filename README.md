@@ -8,6 +8,13 @@ Cetan app is an aplication for realtime chatting
 - Git Bash
 - Docker Desktop
 - Email Account for sending mail with smtp. (need email and apps password). save it in env
+- env for websocket
+
+```
+PUSHER_APP_ID=whateveryouwant
+PUSHER_APP_KEY=whateveryouwant
+PUSHER_APP_SECRET=whateveryouwant
+```
 
 # Installation
 
@@ -52,7 +59,7 @@ docker container exec php php artisan websockets:serve
 
 - For documentaion,  open 127.0.0.1:8000/api/documentation or http://localhost:8000/api/documentation
 
-- For realtime socket dashboard, open 127.0.0.1/laravel-websockets
+- For realtime socket dashboard, open 127.0.0.1:8000/laravel-websockets or http://localhost:8000/laravel-websockets
 
 
 # Contributing
