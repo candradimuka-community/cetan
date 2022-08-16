@@ -6,7 +6,9 @@ use App\Models\Room;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Events\NewMessageEvent;
+use App\Http\Resources\RoomResource;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\OtherRoomResource;
 
 class MessageController extends Controller
 {
@@ -33,7 +35,11 @@ class MessageController extends Controller
             $room->updated_at = now();
             $room->save();
             $op = $room->user_1_id == $request->user()->id ? $room->user_2_id : $room->user_1_id;
-            broadcast(new NewMessageEvent($op, $message->id, $room->id));
+            $newRoom = Room::where('user_1_id',$op)->orWhere('user_2_id',$op)->orderBy('updated_at','desc')->get();
+            foreach($newRoom as $nR){
+                $nR->op = $op;
+            }
+            broadcast(new NewMessageEvent($op, new MessageResource($message), OtherRoomResource::collection($newRoom)));
             return (new MessageResource($message))
                     ->response()
                     ->setStatusCode(201);

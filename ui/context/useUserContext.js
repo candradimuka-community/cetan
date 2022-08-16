@@ -211,14 +211,6 @@ export const UserProvider = ({children}) => {
             getNextDataMessage(nextLink.id, nextLink.url)
         }
     }, [nextLink])
-    useEffect(()=>{
-        if(updateData.id !== 0 && updateData.room !== 0){
-            getRoomList(token)
-            if(chatRoom.id === updateData.room){
-                getOneMessage(updateData.id, updateData.room)
-            }
-        }
-    }, [updateData])
     return (
         <UserContext.Provider value={share}>
             {children}

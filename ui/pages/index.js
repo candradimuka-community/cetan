@@ -86,12 +86,20 @@ const Index = () => {
     if(typeof window !== 'undefined'){
         window.Echo.channel(`Cetan-${state.user.id}`)
             .listen('.NewMessage', (e) => {
-                if(state.updateData.id !== e.id || state.updateData.room !== e.room){
-                    action.setUpdateData({
-                        id: e.id,
-                        room: e.room
-                    })
-                }
+                console.log(e)
+                const msg = e.message
+                state.dataMessage.forEach(item=>{
+                    if(item.id === msg.room_id){
+                        if(item.message.filter(it => it.id === msg.id).length === 0){
+                            item.message = [
+                                msg,
+                                ...item.message
+                            ]
+                        }
+                    }
+                })
+                action.setDataMessage([...state.dataMessage])
+                action.setRoom(e.roomList)
             });
     }
     useEffect(()=>{

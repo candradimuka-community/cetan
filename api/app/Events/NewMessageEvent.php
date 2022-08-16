@@ -20,12 +20,12 @@ class NewMessageEvent implements ShouldBroadcast
      * @return void
      */
     protected $user;
-    public $id, $room;
-    public function __construct($user, $id, $room)
+    public $message, $roomList;
+    public function __construct($user, $message, $roomList)
     {
         $this->user = $user;
-        $this->id = $id;
-        $this->room = $room;
+        $this->message = $message;
+        $this->roomList = $roomList;
     }
 
     /**
