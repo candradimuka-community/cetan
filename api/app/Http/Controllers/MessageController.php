@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Events\NewMessageEvent;
+use App\Events\DeleteMessageEvent;
 use App\Http\Resources\RoomResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\OtherRoomResource;
@@ -62,7 +63,11 @@ class MessageController extends Controller
             } catch (\Throwable $th) {
                 //throw $th;
             }
+            $room = Room::find($message->room_id);
+            $op = $room->user_1_id == $request->user()->id ? $room->user_2_id : $room->user_1_id;
+            $id = $message->id;
             $message->delete();
+            broadcast(new DeleteMessageEvent($op, $id, $room->id));
             return response()->json([
                 'status'=>'deleted'
             ], 200);
