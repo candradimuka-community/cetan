@@ -23,6 +23,7 @@ class MessageResource extends JsonResource
             'readed'=>$this->readed,
             'readed_at'=>$this->readed_at,
             'time'=>$this->created_at,
+            'timer'=>$this->created_at->diffForHumans(),
             'parent'=>$this->message_id != null ? new MessageResource(Message::find($this->message_id)) : []
         ];
     }

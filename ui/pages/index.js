@@ -40,13 +40,16 @@ const Index = () => {
         body: '',
         message_id: ''
     })
-    const changeTime = (data) => {
+    const changeTime = (data, timer) => {
         const temp = data.split('T')
         const date = temp[0]
         const timeTemp = temp[1].split('.')[0]
         const tmp = timeTemp.split(':')
         const time = `${tmp[0]}:${tmp[1]}`
-        return [date, time]
+        if(date !== new Date().toJSON().slice(0,10).replace(/-/g,'-')){
+            return timer
+        }
+        return time
     }
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -181,7 +184,7 @@ const Index = () => {
                             <p>{item.body}</p>
                             <p className="text-sm flex justify-end items-center gap-2 w-full">
                                 <span>
-                                    {item.time ? changeTime(item.time)[1] : 'Baru Saja'}
+                                    {item.time ? changeTime(item.time, item.timer) : 'Baru Saja'}
                                 </span>
                                 {item.user_id === state.user.id && (
                                     <span>
