@@ -32,19 +32,19 @@ you dont have a database migrated. now you can running artisan command like belo
 you can running artisan command by :
 
 ```
-docker container exec php php artisan command
+docker container exec api php artisan command
 ```
 
 example for get route list:
 
 ```
-docker container exec php php artisan route:list
+docker container exec api php artisan route:list
 ```
 
 # Running websocket
 
 ```
-docker container exec php php artisan websockets:serve
+docker container exec api php artisan websockets:serve
 ```
 
 # ++ Feature
