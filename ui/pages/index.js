@@ -3,7 +3,7 @@ import Router from "next/router";
 import UseUserContext from "../context/useUserContext";
 import NavLeft from "../components/navLeft";
 import FormEl from "../components/formEl"
-import { CheckIcon, ClockIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/outline";
+import { CheckIcon, ChevronDownIcon, ClockIcon, PaperAirplaneIcon, UserIcon } from "@heroicons/react/outline";
 import LeftSlider from "../components/leftSlider";
 import NavRight from "../components/navRight";
 import { useInView } from 'react-intersection-observer';
@@ -86,7 +86,6 @@ const Index = () => {
     if(typeof window !== 'undefined'){
         window.Echo.channel(`Cetan-${state.user.id}`)
             .listen('.NewMessage', (e) => {
-                console.log(e)
                 const msg = e.message
                 state.dataMessage.forEach(item=>{
                     if(item.id === msg.room_id){
@@ -101,6 +100,15 @@ const Index = () => {
                 action.setDataMessage([...state.dataMessage])
                 action.setRoom(e.roomList)
             });
+        window.Echo.channel(`Cetan-${state.user.id}`)
+            .listen('.DeleteMessage', (e)=>{
+                state.dataMessage.forEach(item=>{
+                    if(item.id === e.room){
+                        item.message = item.message.filter(it => it.id !== e.message)
+                    }
+                })
+                action.setDataMessage([...state.dataMessage])
+            })
     }
     useEffect(()=>{
         setRoom(state.room.filter(item => item.opponent.email.toLowerCase().includes(search)))
@@ -159,7 +167,17 @@ const Index = () => {
                     maxHeight: state.height
                 }}>
                     {message.message.map((item, index)=>(
-                        <div className={`w-1/2 m-2 p-2 ${item.user_id === state.user.id ? 'bg-cyan-300 rounded-br-md rounded-tl-md self-end':'bg-lime-300 rounded-bl-md rounded-tr-md'}`}>
+                        <div className={`group relative w-1/2 m-2 p-2 ${item.user_id === state.user.id ? 'bg-cyan-300 rounded-br-md rounded-tl-md self-end':'bg-lime-300 rounded-bl-md rounded-tr-md'}`}>
+                            {item.user_id === state.user.id && (
+                                <>
+                                    <div className="absolute right-2 hidden group-hover:block peer">
+                                        <ChevronDownIcon className="w-5 h-5" />
+                                    </div>
+                                    <div onClick={()=>action.deleteMessage(item.id, item.room_id)} className="bg-white px-3 absolute hidden peer-hover:block right-2 top-6 hover:block cursor-pointer hover:bg-slate-100 active:bg-slate-200 rounded-sm">
+                                        delete
+                                    </div>
+                                </>
+                            )}
                             <p>{item.body}</p>
                             <p className="text-sm flex justify-end items-center gap-2 w-full">
                                 <span>

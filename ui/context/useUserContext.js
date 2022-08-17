@@ -131,24 +131,39 @@ export const UserProvider = ({children}) => {
             setDataMessage([...dataMessage])
         }
     }
-    const getOneMessage = async (id, room) => {
+    const deleteMessage = async (id, room) => {
         const {status, data} = await Api({
-            path:'message/'+id,
-            method:'GET',
+            path: 'message/'+id,
+            method: 'DELETE',
             token
         })
-        if(status === 201 || status === 200){
-            dataMessage.forEach(item => {
+        if(status === 200){
+            dataMessage.forEach(item=>{
                 if(item.id === room){
-                    const temp = item.message.filter(it=> it.id === data.data.id)
-                    if(temp.length === 0){
-                        item.message = [data.data, ...item.message]
-                    }
+                    item.message = item.message.filter(it => it.id !== id)
                 }
             })
             setDataMessage([...dataMessage])
         }
     }
+    // const getOneMessage = async (id, room) => {
+    //     const {status, data} = await Api({
+    //         path:'message/'+id,
+    //         method:'GET',
+    //         token
+    //     })
+    //     if(status === 201 || status === 200){
+    //         dataMessage.forEach(item => {
+    //             if(item.id === room){
+    //                 const temp = item.message.filter(it=> it.id === data.data.id)
+    //                 if(temp.length === 0){
+    //                     item.message = [data.data, ...item.message]
+    //                 }
+    //             }
+    //         })
+    //         setDataMessage([...dataMessage])
+    //     }
+    // }
     const share = {
             action: {
                 setUser,
@@ -169,7 +184,8 @@ export const UserProvider = ({children}) => {
                 postMessage,
                 getNextDataMessage,
                 setNextLink,
-                setUpdateData
+                setUpdateData,
+                deleteMessage
             },
             state : {
                 user,
