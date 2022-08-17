@@ -1,6 +1,21 @@
 version: '3.7'
 
 services:
+  webserver:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - mega_network
   mysql:
     image: mysql:8.0
     container_name: mysql
@@ -19,14 +34,14 @@ services:
       SERVICE_NAME: mysql
     networks:
       - mega_network
-  php:
+  api:
     build:
       context: ./api
       dockerfile: Dockerfile
     command: 'php artisan serve --host=0.0.0.0'
-    container_name: php
+    container_name: api
     volumes:
-      - ./api:/app/api
+      - ./api:/var/www/api
     ports:
       - "8000:8000"
       - "6001:6001"
@@ -73,12 +88,12 @@ services:
       NEXT_PUBLIC_MIX_PUSHER_APP_KEY: ${PUSHER_APP_KEY}
       NEXT_PUBLIC_MIX_PUSHER_APP_CLUSTER: ${PUSHER_APP_CLUSTER}
     volumes:
-      - ./ui:/app/ui
-      - /app/ui/node_modules
-      - /app/ui/.next
+      - ./ui:/var/www/ui
+      - /var/www/ui/node_modules
+      - /var/www/ui/.next
     restart: unless-stopped
     ports:
-      - 80:3000
+      - 3000:3000
     networks:
       - mega_network
 

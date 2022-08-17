@@ -6,7 +6,7 @@ RUN curl -sS https://getcomposer.org/installer​ | php -- \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app/api
+WORKDIR /var/www/api
 
 COPY . .
 
