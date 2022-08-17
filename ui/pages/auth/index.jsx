@@ -69,6 +69,7 @@ const Index = () => {
             if(status === 200){
                 setStep(3)
                 setLoading(false)
+                setPw(data.data.can_reset_password !== "false")
             } else {
                 setLoading(false)
             }
