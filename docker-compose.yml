@@ -42,6 +42,7 @@ services:
     container_name: api
     volumes:
       - ./api:/var/www/api
+      - ./var/www/api/vendor
     ports:
       - "8000:8000"
       - "6001:6001"
